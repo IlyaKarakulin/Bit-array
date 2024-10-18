@@ -79,6 +79,9 @@ BitArray::BitArray(const BitArray &b)
 
 BitArray::BitArray(int num_bits, ulong value)
 {
+    if (num_bits <= 64)
+        value <<= dim - num_bits;
+
     this->count_bit = num_bits;
     int len_vector{(int)ceil((double)this->count_bit / dim)};
     bit_arr.reserve(len_vector);
