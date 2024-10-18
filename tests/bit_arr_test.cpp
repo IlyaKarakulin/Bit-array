@@ -67,6 +67,23 @@ TEST(ConTest, metods)
     EXPECT_EQ(c.to_string(), "11001101 01");
 }
 
+BitArray a1(5, 0b10101);
+BitArray b1(5, 0b01011);
+
 TEST(ConTest, operators)
 {
+    EXPECT_EQ((a1 & b1).to_string(), "00001");
+    EXPECT_EQ((a1 | b1).to_string(), "11111");
+    EXPECT_EQ((a1 ^ b1).to_string(), "11110");
+
+    a1 >>= 2;
+    b1 <<= 2;
+    EXPECT_EQ(a1.to_string(), "00101");
+    EXPECT_EQ(b1.to_string(), "01100");
+
+    EXPECT_EQ((a1 >> 1).to_string(), "00010");
+    EXPECT_EQ((b1 << 1).to_string(), "11000");
+
+    b1 = ~b1;
+    EXPECT_EQ(b1.to_string(), "10011");
 }
