@@ -9,8 +9,4 @@ add_subdirectory(lib)
 
 target_include_directories(BitArrayLib PUBLIC .) # PRIVATE
 
-add_executable(BitArrayMain main.cpp)
-
-target_link_libraries(BitArrayMain BitArrayLib)
-
 add_subdirectory(tests)
