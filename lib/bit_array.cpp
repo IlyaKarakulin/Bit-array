@@ -79,18 +79,37 @@ BitArray::BitArray(const BitArray &b)
 
 BitArray::BitArray(int num_bits, ulong value)
 {
-    if (num_bits <= 64)
-        value <<= dim - num_bits;
 
-    this->count_bit = num_bits;
-    int len_vector{(int)ceil((double)this->count_bit / dim)};
+    ulong mask = UL_MAX;
+    int len_value = 0;
 
-    bit_arr.reserve(len_vector);
-    bit_arr.insert(bit_arr.begin(), value);
-
-    for (int i = 1; i < len_vector; ++i)
+    // считаю количество значащих битов
+    while (mask & value)
     {
-        bit_arr.push_back(0x0);
+        ++len_value;
+        mask <<= 1;
+    }
+
+    // если значащих битов больше, чем num_bits, то вызываю исключение
+    if (len_value > num_bits)
+    {
+        throw std::range_error("Error: length input value > length bit array\n");
+    }
+    else
+    {
+        if (num_bits <= 64)
+            value <<= dim - num_bits;
+
+        this->count_bit = num_bits;
+        int len_vector{(int)ceil((double)this->count_bit / dim)};
+
+        bit_arr.reserve(len_vector);
+        bit_arr.insert(bit_arr.begin(), value);
+
+        for (int i = 1; i < len_vector; ++i)
+        {
+            bit_arr.push_back(0x0);
+        }
     }
 }
 

@@ -10,6 +10,15 @@
 #define UL_MAX 0xffffffffffffffff
 typedef unsigned long ulong;
 
+class diff_length_of_bit_arr : public std::exception
+{
+public:
+    const char *what() const noexcept override
+    {
+        return "Error: Different lengths of bit arrays\n";
+    }
+};
+
 class BitArray
 {
 private:

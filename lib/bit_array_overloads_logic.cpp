@@ -1,14 +1,5 @@
 #include "bit_array.hpp"
 
-class diff_length_of_bit_arr : public std::exception
-{
-public:
-    char *what()
-    {
-        return "Differents length of bit array\n";
-    }
-};
-
 bool operator==(const BitArray &a, const BitArray &b)
 {
     if (a.size() == b.size())
