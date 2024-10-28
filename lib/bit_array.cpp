@@ -83,14 +83,14 @@ BitArray::BitArray(int num_bits, ulong value)
     ulong mask = UL_MAX;
     int len_value = 0;
 
-    // считаю количество значащих битов
+    // counting the number of significant bits
     while (mask & value)
     {
         ++len_value;
         mask <<= 1;
     }
 
-    // если значащих битов больше, чем num_bits, то вызываю исключение
+    // if there are more significant bits than num_bits, then I raise an exception
     if (len_value > num_bits)
     {
         throw std::range_error("Error: length input value > length bit array\n");
