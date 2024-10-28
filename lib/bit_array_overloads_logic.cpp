@@ -1,5 +1,14 @@
 #include "bit_array.hpp"
 
+class diff_length_of_bit_arr : public std::exception
+{
+public:
+    char *what()
+    {
+        return "Differents length of bit array\n";
+    }
+};
+
 bool operator==(const BitArray &a, const BitArray &b)
 {
     if (a.size() == b.size())
@@ -15,7 +24,7 @@ bool operator==(const BitArray &a, const BitArray &b)
     }
     else
     {
-        return false;
+        throw diff_length_of_bit_arr();
     }
 }
 
@@ -27,44 +36,66 @@ bool operator!=(const BitArray &a, const BitArray &b)
 
 BitArray operator&(const BitArray &b1, const BitArray &b2)
 {
-    BitArray res(b1);
-
-    for (int i = 0; i < res.size(); ++i)
+    if (b1.size() == b2.size())
     {
-        res.set(i, res[i] && b2[i]);
-    }
+        BitArray res(b1);
 
-    return res;
+        for (int i = 0; i < res.size(); ++i)
+        {
+            res.set(i, res[i] && b2[i]);
+        }
+
+        return res;
+    }
+    else
+    {
+        throw diff_length_of_bit_arr();
+    }
 }
 
 BitArray operator|(const BitArray &b1, const BitArray &b2)
 {
-    BitArray res(b1);
-
-    for (int i = 0; i < res.size(); ++i)
+    if (b1.size() == b2.size())
     {
-        res.set(i, res[i] || b2[i]);
-    }
+        BitArray res(b1);
 
-    return res;
+        for (int i = 0; i < res.size(); ++i)
+        {
+            res.set(i, res[i] || b2[i]);
+        }
+
+        return res;
+    }
+    else
+    {
+        throw diff_length_of_bit_arr();
+    }
 }
 
 BitArray operator^(const BitArray &b1, const BitArray &b2)
 {
-    BitArray res(b1);
-
-    for (int i = 0; i < res.size(); ++i)
+    if (b1.size() == b2.size())
     {
-        res.set(i, res[i] != b2[i]);
-    }
+        BitArray res(b1);
 
-    return res;
+        for (int i = 0; i < res.size(); ++i)
+        {
+            res.set(i, res[i] != b2[i]);
+        }
+
+        return res;
+    }
+    else
+    {
+        throw diff_length_of_bit_arr();
+    }
 }
 
 BitArray BitArray::operator~() const
 {
     BitArray b(*this);
     int i = 0;
+
     for (auto x : this->bit_arr)
     {
         b.bit_arr[i] = ~x;
@@ -89,13 +120,12 @@ BitArray &BitArray::operator&=(const BitArray &b)
         {
             this->bit_arr[i] &= b.bit_arr[i];
         }
+        return *this;
     }
     else
     {
-        perror("The length of the arrays is different\n");
+        throw diff_length_of_bit_arr();
     }
-
-    return *this;
 }
 
 BitArray &BitArray::operator|=(const BitArray &b)
@@ -104,13 +134,13 @@ BitArray &BitArray::operator|=(const BitArray &b)
     {
         for (int i = 0; i < this->bit_arr.size(); ++i)
             this->bit_arr[i] |= b.bit_arr[i];
+
+        return *this;
     }
     else
     {
-        perror("The length of the arrays is different\n");
+        throw diff_length_of_bit_arr();
     }
-
-    return *this;
 }
 
 BitArray &BitArray::operator^=(const BitArray &b)
@@ -121,13 +151,12 @@ BitArray &BitArray::operator^=(const BitArray &b)
         {
             this->bit_arr[i] ^= b.bit_arr[i];
         }
+        return *this;
     }
     else
     {
-        perror("The length of the arrays is different\n");
+        throw diff_length_of_bit_arr();
     }
-
-    return *this;
 }
 
 BitArray &BitArray::operator>>=(int n)
@@ -136,7 +165,7 @@ BitArray &BitArray::operator>>=(int n)
         this->set(i, (*this)[i - n]);
 
     for (int i = 0; i < n; ++i)
-        this->set(i, 0);
+        this->reset(i);
 
     return *this;
 }

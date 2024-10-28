@@ -84,6 +84,7 @@ BitArray::BitArray(int num_bits, ulong value)
 
     this->count_bit = num_bits;
     int len_vector{(int)ceil((double)this->count_bit / dim)};
+
     bit_arr.reserve(len_vector);
     bit_arr.insert(bit_arr.begin(), value);
 

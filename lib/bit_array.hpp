@@ -26,11 +26,6 @@ public:
     explicit BitArray(int num_bits, ulong value = 0);
     BitArray(const BitArray &b);
 
-    void swap(BitArray &b);
-    void resize(int num_bits, bool value = false);
-    void clear();
-    void push_back(bool bit);
-
     BitArray &operator=(const BitArray &b);
     BitArray &operator&=(const BitArray &b);
     BitArray &operator|=(const BitArray &b);
@@ -46,6 +41,11 @@ public:
     BitArray &set(int n, bool val = true);
     BitArray &reset(int n);
     BitArray &reset();
+
+    void swap(BitArray &b);
+    void resize(int num_bits, bool value = false);
+    void clear();
+    void push_back(bool bit);
 
     bool any() const;
     bool none() const;
