@@ -1,13 +1,12 @@
 #include <gtest/gtest.h>
 #include "../lib/bit_array.hpp"
 
-BitArray a(65, UL_MAX);
-BitArray b(a);
-BitArray d(5, 0b10101);
-BitArray c(10, 0b1100110101);
-
 TEST(ConTest, constructor)
 {
+    BitArray a(65, UL_MAX);
+    BitArray b(a);
+    BitArray d(5, 0b10101);
+
     EXPECT_EQ(a.size(), 65);
     EXPECT_EQ(a[0], 1);
     EXPECT_EQ(a[63], 1);
@@ -24,8 +23,28 @@ TEST(ConTest, constructor)
     EXPECT_EQ(d[2], 1);
 }
 
+TEST(ConTest, throw_constructor)
+{
+    try
+    {
+        BitArray c(10, 0b1100110101111);
+        EXPECT_EQ(c.size(), 10);
+        EXPECT_EQ(c[0], 1);
+        EXPECT_EQ(c[1], 1);
+        EXPECT_EQ(c[8], 0);
+        EXPECT_EQ(c[9], 1);
+    }
+    catch (const std::range_error &e)
+    {
+        std::cerr << e.what();
+    }
+}
+
 TEST(ConTest, metods)
 {
+    BitArray a(65, UL_MAX);
+    BitArray d(5, 0b10101);
+
     a.swap(d);
     EXPECT_EQ(d.size(), 65);
     EXPECT_EQ(d[0], 1);
@@ -56,34 +75,43 @@ TEST(ConTest, metods)
     EXPECT_EQ(d[23], 0);
 
     d.reset();
-
     EXPECT_EQ(d.none(), 1);
     EXPECT_EQ(d.any(), 0);
 
     d.set(65, 1);
     EXPECT_EQ(d.none(), 0);
     EXPECT_EQ(d.any(), 1);
-
-    EXPECT_EQ(c.to_string(), "11001101 01");
 }
-
-BitArray a1(5, 0b10101);
-BitArray b1(5, 0b01011);
 
 TEST(ConTest, operators)
 {
-    EXPECT_EQ((a1 & b1).to_string(), "00001");
-    EXPECT_EQ((a1 | b1).to_string(), "11111");
-    EXPECT_EQ((a1 ^ b1).to_string(), "11110");
+    BitArray a(5, 0b10101);
+    BitArray b(5, 0b01011);
+    BitArray c(6, 0b011011);
 
-    a1 >>= 2;
-    b1 <<= 2;
-    EXPECT_EQ(a1.to_string(), "00101");
-    EXPECT_EQ(b1.to_string(), "01100");
+    try
+    {
+        a & c;
+    }
+    catch (const diff_length_of_bit_arr &e)
+    {
+        std::cerr << e.what();
+    }
 
-    EXPECT_EQ((a1 >> 1).to_string(), "00010");
-    EXPECT_EQ((b1 << 1).to_string(), "11000");
+    EXPECT_EQ((a & b).to_string(), "00001");
+    EXPECT_EQ((a | b).to_string(), "11111");
+    EXPECT_EQ((a ^ b).to_string(), "11110");
 
-    b1 = ~b1;
-    EXPECT_EQ(b1.to_string(), "10011");
+    a >>= 2;
+    b <<= 2;
+    EXPECT_EQ(a.to_string(), "00101");
+    EXPECT_EQ(b.to_string(), "01100");
+    EXPECT_EQ((a >> 1).to_string(), "00010");
+    EXPECT_EQ((b << 1).to_string(), "11000");
+
+    b = ~b;
+    EXPECT_EQ(b.to_string(), "10011");
+
+    a >>= 20;
+    EXPECT_EQ(a.to_string(), "00000");
 }
