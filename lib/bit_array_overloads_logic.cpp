@@ -152,6 +152,11 @@ BitArray &BitArray::operator^=(const BitArray &b)
 
 BitArray &BitArray::operator>>=(int n)
 {
+    if (n > this->count_bit)
+    {
+        n = this->count_bit;
+    }
+
     for (int i = this->size() - 1; i >= n; --i)
         this->set(i, (*this)[i - n]);
 
@@ -163,6 +168,11 @@ BitArray &BitArray::operator>>=(int n)
 
 BitArray &BitArray::operator<<=(int n)
 {
+    if (n > this->count_bit)
+    {
+        n = this->count_bit;
+    }
+
     for (int i = 0; i < this->size() - n; ++i)
         this->set(i, (*this)[i + n]);
 
@@ -174,6 +184,11 @@ BitArray &BitArray::operator<<=(int n)
 
 BitArray BitArray::operator>>(int n) const
 {
+    if (n > this->count_bit)
+    {
+        n = this->count_bit;
+    }
+
     BitArray b(*this);
 
     for (int i = this->size() - 1; i >= n; --i)
@@ -187,6 +202,11 @@ BitArray BitArray::operator>>(int n) const
 
 BitArray BitArray::operator<<(int n) const
 {
+    if (n > this->count_bit)
+    {
+        n = this->count_bit;
+    }
+
     BitArray b(*this);
 
     for (int i = 0; i < this->size() - n; ++i)
@@ -200,15 +220,13 @@ BitArray BitArray::operator<<(int n) const
 
 bool BitArray::operator[](int i) const
 {
-    try
+    if (i >= this->count_bit)
     {
-        ulong res = bit_arr.at(i / dim) & (1UL << (63 - i));
-        return res == 0 ? false : true;
+        throw std::range_error("Error: index out of range\n");
     }
-    catch (const std::exception &e)
+    else
     {
-        std::cerr << "Caught: " << e.what() << std::endl;
-        std::cerr << "Type: " << typeid(e).name() << std::endl;
-        return false;
+        ulong res = bit_arr[i / dim] & (1UL << (63 - i));
+        return res == 0 ? false : true;
     }
 }

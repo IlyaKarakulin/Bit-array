@@ -180,18 +180,17 @@ std::string BitArray::to_string() const
 
 BitArray &BitArray::set(int index, bool value)
 {
-    try
+    if (index >= this->count_bit)
+    {
+        throw std::range_error("Error: index out of range\n");
+    }
     {
         ulong mask = 1UL << ((this->dim - 1) - (index % this->dim));
         int num_unit{index / this->dim};
 
         if (((bit_arr.at(num_unit) & mask) && 1) != (value && 1))
             bit_arr.at(num_unit) = bit_arr.at(num_unit) ^ mask;
+
+        return *this;
     }
-    catch (const std::exception &e)
-    {
-        std::cerr << "Caught: " << e.what() << std::endl;
-        std::cerr << "Type: " << typeid(e).name() << std::endl;
-    }
-    return *this;
 }

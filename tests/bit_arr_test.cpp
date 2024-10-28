@@ -12,6 +12,15 @@ TEST(ConTest, constructor)
     EXPECT_EQ(a[63], 1);
     EXPECT_EQ(a[64], 0);
 
+    try
+    {
+        EXPECT_EQ(a[65], 0);
+    }
+    catch (const std::range_error &e)
+    {
+        std::cerr << e.what();
+    }
+
     EXPECT_EQ(b.size(), 65);
     EXPECT_EQ(b[0], 1);
     EXPECT_EQ(b[63], 1);
@@ -62,6 +71,8 @@ TEST(ConTest, metods)
 
     a.clear();
     EXPECT_EQ(a.empty(), 0);
+    a.clear();
+    EXPECT_EQ(a.empty(), 0);
 
     d.push_back(1);
     EXPECT_EQ(d.size(), 66);
@@ -69,6 +80,16 @@ TEST(ConTest, metods)
 
     d.set(65, 0);
     EXPECT_EQ(d[65], 0);
+
+    try
+    {
+        d.set(66, 0);
+        EXPECT_EQ(d[66], 0);
+    }
+    catch (const std::range_error &e)
+    {
+        std::cerr << e.what();
+    }
 
     EXPECT_EQ(d[23], 1);
     d.reset(23);
